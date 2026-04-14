@@ -56,6 +56,25 @@
   --color-gh-gray: #1a1a1a;
   --color-gh-mid-gray: #d4d4d4;
   --color-gh-muted: #7a7a7a;
+  --text-hero: clamp(64px, 9vw, 150px);
+  --text-display: clamp(42px, 6vw, 88px);
+  --text-statement: clamp(30px, 4vw, 60px);
+  --text-cta: clamp(64px, 9vw, 150px);
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.02em;
+  --animate-fade-up: fadeUp 0.9s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 :root {
@@ -162,6 +181,11 @@ html {
   border-radius: 30px;
   overflow: hidden;
   transform-origin: bottom center;
+}
+
+.expertise-card {
+  border-radius: 28px;
+  min-height: 85svh;
 }
 
 a,
