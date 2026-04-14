@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-
+import ActionLink from "@/components/sections/shared/ActionLink";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -36,7 +36,7 @@ const navLinks = [
 ] as const;
 
 const desktopCtaClassName =
-  "gap-2 px-4 py-2 text-lg font-semibold border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90";
+  "border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90";
 
 const mobileLinkClassName =
   "rounded-2xl border border-black/8 bg-white/78 px-4 py-3 text-lg font-semibold shadow-[0_10px_24px_rgba(0,0,0,0.04)] hover:bg-white";
@@ -53,17 +53,6 @@ type LenisWindow = Window & {
     ) => void;
   };
 };
-
-function renderCtaContent(iconClassName: string) {
-  return (
-    <>
-      <span>Get Results</span>
-      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-gh-orange">
-        <Flame className={iconClassName} aria-hidden="true" />
-      </span>
-    </>
-  );
-}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -88,20 +77,12 @@ export default function Navbar() {
     updateMotionPreference();
     handleScroll();
 
-    if (typeof motionQuery.addEventListener === "function") {
-      motionQuery.addEventListener("change", updateMotionPreference);
-    } else {
-      motionQuery.addListener(updateMotionPreference);
-    }
+    motionQuery.addEventListener("change", updateMotionPreference);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      if (typeof motionQuery.removeEventListener === "function") {
-        motionQuery.removeEventListener("change", updateMotionPreference);
-      } else {
-        motionQuery.removeListener(updateMotionPreference);
-      }
+      motionQuery.removeEventListener("change", updateMotionPreference);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -329,19 +310,17 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Button
-          asChild
+        <ActionLink
+          href="#contact"
+          label="Get Results"
+          icon={<Flame className="h-4 w-4" aria-hidden="true" />}
           variant="ghSolid"
-          size="lg"
+          onClick={createNavClickHandler("#contact")}
           className={cn(
             "hidden justify-self-end xl:inline-flex",
             desktopCtaClassName,
           )}
-        >
-          <Link href="#contact" onClick={createNavClickHandler("#contact")}>
-            {renderCtaContent("h-4 w-4")}
-          </Link>
-        </Button>
+        />
 
         <Sheet open={open} onOpenChange={handleSheetOpenChange}>
           <SheetTrigger asChild>
@@ -388,19 +367,14 @@ export default function Navbar() {
               ))}
 
               <div ref={menuCtaRef} className="pt-2">
-                <Button
-                  asChild
+                <ActionLink
+                  href="#contact"
+                  label="Get Results"
+                  icon={<Flame className="h-3.5 w-3.5" aria-hidden="true" />}
                   variant="ghSolid"
-                  size="lg"
-                  className="mt-1 w-fit gap-2 border-fuchsia-200 bg-fuchsia-200 px-4 py-2 text-lg font-semibold text-gh-black hover:bg-fuchsia-200/90"
-                >
-                  <Link
-                    href="#contact"
-                    onClick={createNavClickHandler("#contact", true)}
-                  >
-                    {renderCtaContent("h-3.5 w-3.5")}
-                  </Link>
-                </Button>
+                  onClick={createNavClickHandler("#contact", true)}
+                  className="mt-1 w-fit border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90"
+                />
               </div>
             </nav>
           </SheetContent>
