@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/Navbar";
+import BrandMarquee from "@/components/sections/BrandMarquee";
 import Expertises from "@/components/sections/Expertises";
 import Hero from "@/components/sections/Hero";
 import Statement from "@/components/sections/Statement";
@@ -12,6 +13,7 @@ export default function Home() {
       <Statement />
       <Expertises />
       <Work />
+      <BrandMarquee />
     </main>
   );
 }
