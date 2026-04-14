@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import BrandMarquee from "@/components/sections/BrandMarquee";
+import CTA from "@/components/sections/CTA";
 import Expertises from "@/components/sections/Expertises";
 import Hero from "@/components/sections/Hero";
 import Statement from "@/components/sections/Statement";
@@ -14,6 +15,7 @@ export default function Home() {
       <Expertises />
       <Work />
       <BrandMarquee />
+      <CTA />
     </main>
   );
 }
