@@ -122,12 +122,6 @@ export default function Hero() {
       const timeline = gsap.timeline({ delay: 0.15 });
 
       timeline
-        .from(".hero-eyebrow", {
-          y: 25,
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        })
         .from(
           ".hero-line",
           {
@@ -137,7 +131,7 @@ export default function Hero() {
             duration: 0.95,
             ease: "power4.out",
           },
-          "-=0.3",
+          0,
         )
         .from(
           ".hero-sub",
