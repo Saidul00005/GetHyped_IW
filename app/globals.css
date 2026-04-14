@@ -188,6 +188,22 @@ html {
   min-height: 85svh;
 }
 
+.work-card {
+  border-radius: 28px;
+  overflow: hidden;
+  border-style: solid;
+  border-width: 6px;
+}
+
+.work-card .info {
+  transform: translateY(0);
+  transition: transform 0.35s ease;
+}
+
+.work-card:hover .info {
+  transform: translateY(-4px);
+}
+
 a,
 button,
 [role="button"],
