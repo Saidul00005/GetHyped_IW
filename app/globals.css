@@ -141,29 +141,32 @@
     @apply border-border outline-ring/50;
   }
 
-  body {
-    background: var(--gh-white);
-    color: var(--gh-black);
-    font-family: var(--font-dm-sans);
-    overflow-x: clip;
-    cursor: default;
-  }
-
   html {
     @apply font-sans;
-    scroll-behavior: auto;
   }
+}
 
-  a,
-  button,
-  [role="button"],
-  summary {
-    cursor: pointer;
-  }
+body {
+  background: var(--gh-white);
+  color: var(--gh-black);
+  font-family: var(--font-dm-sans);
+  overflow-x: clip;
+  cursor: default;
+}
 
-  input,
-  textarea,
-  select {
-    cursor: auto;
-  }
+html {
+  scroll-behavior: auto;
+}
+
+a,
+button,
+[role="button"],
+summary {
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  cursor: auto;
 }
