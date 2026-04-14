@@ -26,6 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -40,19 +41,6 @@ const desktopCtaClassName =
 
 const mobileLinkClassName =
   "rounded-2xl border border-black/8 bg-white/78 px-4 py-3 text-lg font-semibold shadow-[0_10px_24px_rgba(0,0,0,0.04)] hover:bg-white";
-
-type LenisWindow = Window & {
-  __lenis?: {
-    scrollTo: (
-      target: number | string | HTMLElement,
-      options?: {
-        offset?: number;
-        duration?: number;
-        immediate?: boolean;
-      },
-    ) => void;
-  };
-};
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -90,29 +78,10 @@ export default function Navbar() {
   const scrollToSection = useCallback((href: string) => {
     if (!href.startsWith("#")) return false;
 
-    const target = document.getElementById(href.replace(/^#/, ""));
-    if (!target) return false;
-
-    const win = window as LenisWindow;
-    const navHeight =
-      document.querySelector("header")?.getBoundingClientRect().height ?? 96;
-    const offset = -(navHeight + 12);
-
-    if (win.__lenis) {
-      win.__lenis.scrollTo(target, {
-        offset,
-        duration: 1.05,
-      });
-      return true;
-    }
-
-    const targetTop = target.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({
-      top: Math.max(0, targetTop + offset),
-      behavior: "auto",
+    return scrollToSectionById(href.replace(/^#/, ""), {
+      offset: 12,
+      duration: 1.05,
     });
-
-    return true;
   }, []);
 
   const finishClose = useCallback(() => {
