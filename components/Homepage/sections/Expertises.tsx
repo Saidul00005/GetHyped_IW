@@ -11,13 +11,24 @@ import SectionTag from "@/components/Homepage/sections/shared/SectionTag";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const expertises = [
+type Expertise = {
+  num: string;
+  name: string;
+  title: string;
+  desc: string;
+  cta: string;
+  ctaVariant?: "ghSolid" | "ghOutline";
+  bg: string;
+};
+
+const expertises: Expertise[] = [
   {
     num: "01",
     name: "Social strategy",
     title: "Slimme strategie. Sterke start.",
     desc: "We duiken diep in jouw merk, doelgroep en doelen. En vertalen data naar een duidelijk plan met formats die echt impact maken.",
     cta: "Meer over social strategie",
+    ctaVariant: "ghSolid",
     bg: "bg-white",
   },
   {
@@ -26,6 +37,7 @@ const expertises = [
     title: "Content die opvalt en raakt.",
     desc: "We maken content die opvalt. Blijft hangen. En jouw doelgroep raakt. Creatief, snel en energiek.",
     cta: "Meer over content creatie",
+    ctaVariant: "ghOutline",
     bg: "bg-[#ffc3ff]",
   },
   {
@@ -34,6 +46,7 @@ const expertises = [
     title: "Zichtbaar waar en wanneer het telt.",
     desc: "De juiste content verdient het om gezien te worden. We verspreiden de content waar jouw doelgroep is.",
     cta: "Meer over activatie",
+    ctaVariant: "ghOutline",
     bg: "bg-gh-green",
   },
   {
@@ -42,6 +55,7 @@ const expertises = [
     title: "Inzichten die impact maken.",
     desc: "We duiken in de cijfers om te snappen wat echt werkt en sturen jouw content scherp bij.",
     cta: "Meer over data",
+    ctaVariant: "ghOutline",
     bg: "bg-gh-blue",
   },
 ] as const;
@@ -143,7 +157,12 @@ export default function Expertises() {
                 <p className="mt-4 max-w-xl text-3xl leading-[1.2] font-semibold text-black/85">
                   {item.desc}
                 </p>
-                <ActionLink href="#" label={item.cta} className="mt-6" />
+                <ActionLink
+                  href="#"
+                  label={item.cta}
+                  variant={item.ctaVariant}
+                  className="mt-6"
+                />
               </div>
               <div className="ml-auto h-90 w-full max-w-95 rounded-[28px] border-4 border-white bg-black/10" />
             </div>
