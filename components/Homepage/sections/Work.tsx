@@ -20,6 +20,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Work() {
   const rootRef = useRef<HTMLElement>(null);
   const videoRefs = useRef<Array<AdaptiveVideoHandle | null>>([]);
+  const hasNavigableHref = (href: string) =>
+    href.trim().length > 0 && href !== "#";
 
   const playVideo = useCallback((index: number) => {
     const video = videoRefs.current[index];
@@ -84,71 +86,77 @@ export default function Work() {
         </div>
 
         <div className="work-grid mt-12 grid grid-cols-1 gap-6 md:mt-16 md:grid-cols-2 xl:grid-cols-3 xl:items-end">
-          {workData.items.map((item, index) => (
-            <div key={item.title} className={`${item.offset} xl:px-2`}>
-              <Card
-                className={`work-card work-card-anim group relative block overflow-hidden rounded-4xl border-[6px] ${item.border} origin-bottom-left transform-gpu bg-transparent py-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-y-2 hover:-rotate-2`}
-                onMouseEnter={() => {
-                  playVideo(index);
-                }}
-                onMouseLeave={() => {
-                  stopVideo(index);
-                }}
-                onFocusCapture={() => {
-                  playVideo(index);
-                }}
-                onBlurCapture={() => {
-                  stopVideo(index);
-                }}
-              >
-                <Link
-                  href={item.href}
-                  aria-label={`${item.client} - ${item.title}`}
-                  className="absolute inset-0 z-0 rounded-4xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gh-orange/45"
-                />
-                <div className="pointer-events-none relative z-10">
-                  <div className="relative aspect-4/5 overflow-hidden">
-                    <div
-                      className={`absolute inset-0 bg-linear-to-br ${item.media} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]`}
+          {workData.items.map((item, index) => {
+            const isClickable = hasNavigableHref(item.href);
+
+            return (
+              <div key={item.title} className={`${item.offset} xl:px-2`}>
+                <Card
+                  className={`work-card work-card-anim group relative block cursor-pointer overflow-hidden rounded-4xl border-[6px] ${item.border} origin-bottom-left transform-gpu bg-transparent py-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-y-2 hover:-rotate-2`}
+                  onMouseEnter={() => {
+                    playVideo(index);
+                  }}
+                  onMouseLeave={() => {
+                    stopVideo(index);
+                  }}
+                  onFocusCapture={() => {
+                    playVideo(index);
+                  }}
+                  onBlurCapture={() => {
+                    stopVideo(index);
+                  }}
+                >
+                  {isClickable ? (
+                    <Link
+                      href={item.href}
+                      aria-label={`${item.client} - ${item.title}`}
+                      className="absolute inset-0 z-0 rounded-4xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gh-orange/45"
                     />
-                    <div className="pointer-events-auto absolute inset-0">
-                      <AdaptiveVideo
-                        ref={(node) => {
-                          videoRefs.current[index] = node;
-                        }}
-                        src={item.videoSrc}
-                        label={item.videoLabel}
-                        desktopBehavior="manual"
-                        className="h-full w-full object-cover"
+                  ) : null}
+                  <div className="pointer-events-none relative z-10">
+                    <div className="relative aspect-4/5 overflow-hidden">
+                      <div
+                        className={`absolute inset-0 bg-linear-to-br ${item.media} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]`}
                       />
+                      <div className="pointer-events-auto absolute inset-0 cursor-pointer">
+                        <AdaptiveVideo
+                          ref={(node) => {
+                            videoRefs.current[index] = node;
+                          }}
+                          src={item.videoSrc}
+                          label={item.videoLabel}
+                          desktopBehavior="manual"
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-black/12" />
                     </div>
-                    <div className="absolute inset-0 bg-black/12" />
-                  </div>
-                  <CardContent
-                    className={`info absolute right-3 bottom-3 left-3 rounded-[1.25rem] p-4 pt-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 sm:right-4 sm:bottom-4 sm:left-4 sm:pt-7 ${item.panel}`}
-                    style={{
-                      clipPath: "polygon(0 15%, 100% 0, 100% 100%, 0 100%)",
-                    }}
-                  >
-                    <span className="absolute top-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-gh-black">
-                      <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <div className="mb-3 pr-12 sm:mb-4 sm:pr-13">
-                      <h3 className="text-balance text-2xl leading-[0.98] font-extrabold tracking-tight md:text-3xl xl:text-4xl">
-                        {item.title}
-                      </h3>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="h-auto rounded-md border-white/35 bg-white/20 px-3 py-1 text-sm font-semibold text-white sm:text-base"
+                    <CardContent
+                      className={`info absolute right-3 bottom-3 left-3 rounded-[1.25rem] p-4 pt-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 sm:right-4 sm:bottom-4 sm:left-4 sm:pt-7 ${item.panel}`}
+                      style={{
+                        clipPath: "polygon(0 15%, 100% 0, 100% 100%, 0 100%)",
+                      }}
                     >
-                      {item.client}
-                    </Badge>
-                  </CardContent>
-                </div>
-              </Card>
-            </div>
-          ))}
+                      <span className="absolute top-3 right-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-gh-black">
+                        <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <div className="mb-3 pr-12 sm:mb-4 sm:pr-13">
+                        <h3 className="text-balance text-2xl leading-[0.98] font-extrabold tracking-tight md:text-3xl xl:text-4xl">
+                          {item.title}
+                        </h3>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="h-auto rounded-md border-white/35 bg-white/20 px-3 py-1 text-sm font-semibold text-white sm:text-base"
+                      >
+                        {item.client}
+                      </Badge>
+                    </CardContent>
+                  </div>
+                </Card>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
