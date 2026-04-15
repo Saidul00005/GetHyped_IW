@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
+import AdaptiveVideo from "@/components/Homepage/sections/shared/AdaptiveVideo";
 import FeatureCard from "@/components/Homepage/sections/shared/FeatureCard";
 import SectionTag from "@/components/Homepage/sections/shared/SectionTag";
 
@@ -21,7 +22,8 @@ const expertises = [
     cta: "Meer over social strategie",
     ctaVariant: "ghSolid",
     href: "#",
-    videoSrc: "/videos/Homepage/Expertises/video1.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274471/video1_fews8d.mp4",
     videoLabel: "Autoplay social strategy video",
     bg: "bg-white",
   },
@@ -33,7 +35,8 @@ const expertises = [
     cta: "Meer over content creatie",
     ctaVariant: "ghOutline",
     href: "#",
-    videoSrc: "/videos/Homepage/Expertises/video2.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274455/video2_lr1hih.mp4",
     videoLabel: "Autoplay content creation video",
     bg: "bg-[#ffc3ff]",
   },
@@ -45,7 +48,8 @@ const expertises = [
     cta: "Meer over activatie",
     ctaVariant: "ghOutline",
     href: "#",
-    videoSrc: "/videos/Homepage/Expertises/video3.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274434/video3_yasusx.mp4",
     videoLabel: "Autoplay activation video",
     bg: "bg-gh-green",
   },
@@ -57,7 +61,8 @@ const expertises = [
     cta: "Meer over data",
     ctaVariant: "ghOutline",
     href: "#",
-    videoSrc: "/videos/Homepage/Expertises/video4.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274427/video4_uzvaeq.mp4",
     videoLabel: "Autoplay data insights video",
     bg: "bg-gh-blue",
   },
@@ -178,18 +183,11 @@ export default function Expertises() {
                   </div>
                 </div>
                 <div className="relative ml-auto h-110 w-full max-w-95 overflow-hidden rounded-[28px] border-4 border-white bg-black/10">
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    disablePictureInPicture
-                    aria-label={item.videoLabel}
+                  <AdaptiveVideo
+                    src={item.videoSrc}
+                    label={item.videoLabel}
                     className="h-full w-full object-cover"
-                  >
-                    <source src={item.videoSrc} type="video/mp4" />
-                  </video>
+                  />
                 </div>
               </div>
             </div>

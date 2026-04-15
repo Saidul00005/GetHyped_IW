@@ -1,5 +1,6 @@
 "use client";
 
+import AdaptiveVideo from "@/components/Homepage/sections/shared/AdaptiveVideo";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -30,19 +31,11 @@ export default function StatCard({
     >
       {videoSrc ? (
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            disablePictureInPicture
-            aria-label={videoLabel}
+          <AdaptiveVideo
+            src={videoSrc}
+            label={videoLabel ?? "Autoplay card video"}
             className="h-full w-full object-cover"
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-          <span className="sr-only">{videoLabel}</span>
+          />
         </div>
       ) : (
         <CardContent className="flex h-full flex-col justify-between px-7">

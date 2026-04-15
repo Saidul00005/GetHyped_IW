@@ -26,7 +26,8 @@ const statCards: HeroStatCard[] = [
   },
   {
     id: "brands-video",
-    videoSrc: "/videos/Homepage/Hero/video1.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274196/video1_kczmxz.mp4",
     videoLabel: "Autoplay brand showcase video",
     color: "bg-gh-orange text-white",
   },
@@ -39,7 +40,8 @@ const statCards: HeroStatCard[] = [
   },
   {
     id: "creative-video",
-    videoSrc: "/videos/Homepage/Hero/video2.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274201/video2_xrun2e.mp4",
     videoLabel: "Autoplay creative energy video",
     color: "bg-[#1f2937] text-white",
   },

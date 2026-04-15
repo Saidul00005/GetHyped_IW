@@ -8,6 +8,9 @@ import Link from "next/link";
 import { useCallback, useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
+import AdaptiveVideo, {
+  type AdaptiveVideoHandle,
+} from "@/components/Homepage/sections/shared/AdaptiveVideo";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -18,7 +21,8 @@ const works = [
     title: "Van nul naar vol, binnen 3 weken",
     client: "Bullit",
     href: "#",
-    videoSrc: "/videos/Homepage/Work/video1.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274281/video1_drmvzi.mp4",
     videoLabel: "Autoplay Bullit project preview",
     border: "border-gh-orange",
     panel: "bg-gh-orange text-white",
@@ -29,7 +33,8 @@ const works = [
     title: "Zacht in smaak, sterk in beeld",
     client: "Roasta",
     href: "#",
-    videoSrc: "/videos/Homepage/Work/video2.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274268/video2_qs70e0.mp4",
     videoLabel: "Autoplay Roasta project preview",
     border: "border-gh-blue",
     panel: "bg-gh-blue text-white",
@@ -40,7 +45,8 @@ const works = [
     title: "Content die echt smaakt (en raakt)",
     client: "Loco",
     href: "#",
-    videoSrc: "/videos/Homepage/Work/video3.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274262/video3_dmyduj.mp4",
     videoLabel: "Autoplay Loco project preview",
     border: "border-gh-green",
     panel: "bg-gh-green text-white",
@@ -51,23 +57,20 @@ const works = [
 
 export default function Work() {
   const rootRef = useRef<HTMLElement>(null);
-  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+  const videoRefs = useRef<Array<AdaptiveVideoHandle | null>>([]);
 
   const playVideo = useCallback((index: number) => {
     const video = videoRefs.current[index];
     if (!video) return;
 
-    void video.play().catch(() => {
-      // Ignore autoplay interruptions from the browser.
-    });
+    video.play();
   }, []);
 
   const stopVideo = useCallback((index: number) => {
     const video = videoRefs.current[index];
     if (!video) return;
 
-    video.pause();
-    video.currentTime = 0;
+    video.reset();
   }, []);
 
   useGSAP(
@@ -124,41 +127,40 @@ export default function Work() {
             <div key={item.title} className={`${item.offset} xl:px-2`}>
               <Card
                 className={`work-card work-card-anim group relative block overflow-hidden rounded-4xl border-[6px] ${item.border} origin-bottom-left transform-gpu bg-transparent py-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-y-2 hover:-rotate-2`}
+                onMouseEnter={() => {
+                  playVideo(index);
+                }}
+                onMouseLeave={() => {
+                  stopVideo(index);
+                }}
+                onFocusCapture={() => {
+                  playVideo(index);
+                }}
+                onBlurCapture={() => {
+                  stopVideo(index);
+                }}
               >
                 <Link
                   href={item.href}
-                  className="block"
-                  onMouseEnter={() => {
-                    playVideo(index);
-                  }}
-                  onMouseLeave={() => {
-                    stopVideo(index);
-                  }}
-                  onFocus={() => {
-                    playVideo(index);
-                  }}
-                  onBlur={() => {
-                    stopVideo(index);
-                  }}
-                >
+                  aria-label={`${item.client} - ${item.title}`}
+                  className="absolute inset-0 z-0 rounded-4xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gh-orange/45"
+                />
+                <div className="pointer-events-none relative z-10">
                   <div className="relative aspect-4/5 overflow-hidden">
                     <div
                       className={`absolute inset-0 bg-linear-to-br ${item.media} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]`}
                     />
-                    <video
-                      ref={(node) => {
-                        videoRefs.current[index] = node;
-                      }}
-                      muted
-                      loop
-                      playsInline
-                      preload="auto"
-                      disablePictureInPicture
-                      aria-label={item.videoLabel}
-                      className="absolute inset-0 h-full w-full object-cover"
-                    >
-                      <source src={item.videoSrc} type="video/mp4" />
-                    </video>
+                    <div className="pointer-events-auto absolute inset-0">
+                      <AdaptiveVideo
+                        ref={(node) => {
+                          videoRefs.current[index] = node;
+                        }}
+                        src={item.videoSrc}
+                        label={item.videoLabel}
+                        desktopBehavior="manual"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-black/12" />
                   </div>
                   <CardContent
@@ -182,7 +184,7 @@ export default function Work() {
                       {item.client}
                     </Badge>
                   </CardContent>
-                </Link>
+                </div>
               </Card>
             </div>
           ))}
