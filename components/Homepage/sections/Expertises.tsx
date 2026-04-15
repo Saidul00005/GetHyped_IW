@@ -89,7 +89,7 @@ export default function Expertises() {
             const navHeight =
               document.querySelector("header")?.getBoundingClientRect()
                 .height ?? 96;
-            return `top top+=${Math.round(navHeight + 8)}`;
+            return `top top+=${Math.max(Math.round(navHeight * 0.45), 24)}`;
           },
           end: () => {
             const step = Math.max(window.innerHeight * 1.05, 700);
@@ -118,7 +118,7 @@ export default function Expertises() {
 
   return (
     <section id="expertises" ref={rootRef} className="px-6 py-10 md:px-10">
-      <div className="mx-auto flex max-w-400 flex-col gap-6 md:relative md:h-[calc(100vh-7.5rem)] md:overflow-hidden">
+      <div className="mx-auto flex max-w-400 flex-col gap-6 md:relative md:h-[calc(100vh-6rem)] md:overflow-hidden">
         {expertises.map((item, index) => (
           <FeatureCard
             key={item.num}
