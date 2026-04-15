@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail } from "lucide-react";
+import { Mail, Flame } from "lucide-react";
 import { useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
@@ -47,7 +47,12 @@ export default function CTA() {
             label="Mail ons direct"
             icon={<Mail className="h-3.5 w-3.5" aria-hidden="true" />}
           />
-          <ActionLink href="#" label="Get Results" variant="ghSolid" />
+          <ActionLink
+            href="#"
+            label="Get Results"
+            variant="ghSolid"
+            icon={<Flame className="h-3.5 w-3.5" aria-hidden="true" />}
+          />
         </div>
       </div>
     </section>

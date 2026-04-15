@@ -48,6 +48,8 @@ export default function Navbar() {
   const isClosingRef = useRef(false);
   const openTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const prefersReducedMotionRef = useRef(false);
+  const desktopLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const desktopHighlightRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const sheetContentRef = useRef<HTMLDivElement>(null);
   const menuHeaderRef = useRef<HTMLDivElement>(null);
   const menuCtaRef = useRef<HTMLDivElement>(null);
@@ -72,6 +74,26 @@ export default function Navbar() {
     return () => {
       motionQuery.removeEventListener("change", updateMotionPreference);
       window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const highlights = desktopHighlightRefs.current.filter(
+      (node): node is HTMLSpanElement => Boolean(node),
+    );
+
+    gsap.set(highlights, {
+      autoAlpha: 0,
+      scaleX: 0.72,
+      x: -8,
+      transformOrigin: "left center",
+    });
+
+    return () => {
+      gsap.killTweensOf([
+        ...desktopLinkRefs.current.filter(Boolean),
+        ...highlights,
+      ]);
     };
   }, []);
 
@@ -156,6 +178,42 @@ export default function Navbar() {
         }
       },
     [animateMenuClose, scrollToSection],
+  );
+
+  const animateDesktopNavHover = useCallback(
+    (index: number, isEntering: boolean) => {
+      const link = desktopLinkRefs.current[index];
+      const highlight = desktopHighlightRefs.current[index];
+
+      if (!link || !highlight) return;
+
+      gsap.killTweensOf([link, highlight]);
+
+      if (prefersReducedMotionRef.current) {
+        gsap.set(link, { color: "var(--gh-black)" });
+        gsap.set(highlight, {
+          autoAlpha: isEntering ? 1 : 0,
+          scaleX: isEntering ? 1 : 0.72,
+          x: isEntering ? 0 : -8,
+        });
+        return;
+      }
+
+      gsap.to(link, {
+        y: isEntering ? -1 : 0,
+        color: "var(--gh-black)",
+        duration: isEntering ? 0.16 : 0.12,
+        ease: "power2.out",
+      });
+      gsap.to(highlight, {
+        autoAlpha: isEntering ? 1 : 0,
+        scaleX: isEntering ? 1 : 0.72,
+        x: isEntering ? 0 : -8,
+        duration: isEntering ? 0.18 : 0.12,
+        ease: "power2.out",
+      });
+    },
+    [],
   );
 
   useEffect(() => {
@@ -263,15 +321,37 @@ export default function Navbar() {
           )}
         >
           <NavigationMenuList className="gap-4">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <NavigationMenuItem key={link.label}>
                 <NavigationMenuLink asChild className="text-sm! xl:text-base!">
                   <Link
+                    ref={(node) => {
+                      desktopLinkRefs.current[index] = node;
+                    }}
                     href={link.href}
                     onClick={createNavClickHandler(link.href)}
-                    className="font-semibold text-gh-black hover:opacity-70"
+                    onMouseEnter={() => {
+                      animateDesktopNavHover(index, true);
+                    }}
+                    onMouseLeave={() => {
+                      animateDesktopNavHover(index, false);
+                    }}
+                    onFocus={() => {
+                      animateDesktopNavHover(index, true);
+                    }}
+                    onBlur={() => {
+                      animateDesktopNavHover(index, false);
+                    }}
+                    className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl px-3 py-2 font-semibold text-gh-black will-change-transform"
                   >
-                    {link.label}
+                    <span
+                      ref={(node) => {
+                        desktopHighlightRefs.current[index] = node;
+                      }}
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,var(--gh-pink)_0%,var(--gh-orange)_100%)]"
+                    />
+                    <span className="relative z-10">{link.label}</span>
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
