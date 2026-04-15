@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
@@ -61,7 +62,15 @@ export default function Statement() {
         </h2>
 
         <div className="statement-right mt-16 grid grid-cols-1 items-end gap-10 lg:grid-cols-[220px_minmax(0,1fr)_auto]">
-          <div className="h-55 w-55 rounded-2xl bg-linear-to-br from-[#f8c087] to-[#f6d9bc]" />
+          <div className="relative h-90 w-60 overflow-hidden rounded-2xl">
+            <Image
+              src="/images/Homepage/Statement/Image1.jpg"
+              alt="Portrait visual for the statement section"
+              fill
+              className="object-cover"
+              sizes="220px"
+            />
+          </div>
 
           <div className="max-w-175">
             <p className="text-xl leading-[1.2] font-bold tracking-tight md:text-3xl">

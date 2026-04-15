@@ -6,32 +6,44 @@ import { useRef } from "react";
 
 import StatCard from "@/components/Homepage/sections/shared/StatCard";
 
-const statCards = [
+type HeroStatCard = {
+  id: string;
+  number?: string;
+  label?: string;
+  sub?: string;
+  videoSrc?: string;
+  videoLabel?: string;
+  color: string;
+};
+
+const statCards: HeroStatCard[] = [
   {
+    id: "views",
     number: "10M+",
     label: "Organische views",
     sub: "Groei door slimme content",
     color: "bg-gh-blue",
   },
   {
-    number: "30+",
-    label: "Merken geholpen",
-    sub: "Van start-up tot multinational",
+    id: "brands-video",
+    videoSrc: "/videos/Homepage/Hero/video1.mp4",
+    videoLabel: "Autoplay brand showcase video",
     color: "bg-gh-orange text-white",
   },
   {
+    id: "campaigns",
     number: "60+",
     label: "Campagnes per maand",
     sub: "Altijd live. Altijd doorpakken.",
     color: "bg-gh-green",
   },
   {
-    number: "24/7",
-    label: "Creatieve energie",
-    sub: "Social-first execution",
+    id: "creative-video",
+    videoSrc: "/videos/Homepage/Hero/video2.mp4",
+    videoLabel: "Autoplay creative energy video",
     color: "bg-[#1f2937] text-white",
   },
-] as const;
+];
 
 const layoutPresets = [
   [
@@ -187,14 +199,13 @@ export default function Hero() {
 
         <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
           {statCards.map((card, index) => (
-            <div
-              key={`${card.number}-${index}`}
-              className="stat-slot will-change-transform"
-            >
+            <div key={card.id} className="stat-slot will-change-transform">
               <StatCard
                 number={card.number}
                 label={card.label}
                 sub={card.sub}
+                videoSrc={card.videoSrc}
+                videoLabel={card.videoLabel}
                 className={card.color}
               />
             </div>
