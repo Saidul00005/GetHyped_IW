@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-const LENIS_EASING = (time: number) => Math.min(1, 1.001 - 2 ** (-10 * time));
+const LENIS_LERP = 0.11;
 
 export default function SmoothScrollProvider({
   children,
@@ -32,12 +32,12 @@ export default function SmoothScrollProvider({
 
       const lenis = new Lenis({
         autoRaf: false,
-        duration: 1.15,
-        easing: LENIS_EASING,
+        lerp: LENIS_LERP,
         smoothWheel: true,
         syncTouch: false,
-        touchMultiplier: 1.2,
-        wheelMultiplier: 1,
+        touchMultiplier: 1.1,
+        wheelMultiplier: 0.9,
+        overscroll: false,
       });
       const updateScrollTrigger = () => {
         ScrollTrigger.update();
@@ -45,19 +45,24 @@ export default function SmoothScrollProvider({
       const updateLenis = (time: number) => {
         lenis.raf(time * 1000);
       };
+      const handleRefresh = () => {
+        lenis.resize();
+      };
 
       window.__lenis = lenis;
       lenis.on("scroll", updateScrollTrigger);
       gsap.ticker.add(updateLenis);
-      gsap.ticker.lagSmoothing(0);
+      ScrollTrigger.addEventListener("refresh", handleRefresh);
 
       // Recalculate pinned sections and trigger offsets after Lenis mounts.
       window.requestAnimationFrame(() => {
+        lenis.resize();
         ScrollTrigger.refresh();
       });
 
       cleanupLenis = () => {
         gsap.ticker.remove(updateLenis);
+        ScrollTrigger.removeEventListener("refresh", handleRefresh);
         window.__lenis = undefined;
         lenis.destroy();
       };

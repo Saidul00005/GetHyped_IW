@@ -41,10 +41,25 @@ export default function Hero() {
     () => {
       const slots = gsap.utils.toArray<HTMLElement>(".stat-slot");
       let cleanupHandlers: Array<() => void> = [];
+      const basePreset =
+        layoutPresets[Math.floor(Math.random() * layoutPresets.length)];
+
+      const getCardMotion = (index: number) => {
+        const layout = basePreset[index];
+        const card = heroData.stats[index];
+        const isCopyCard = Boolean(card.number);
+
+        return {
+          ...layout,
+          rotation: isCopyCard
+            ? Math.round(layout.rotation * 0.35)
+            : layout.rotation,
+          scale: isCopyCard ? 1 : layout.scale,
+        };
+      };
 
       if (window.innerWidth >= 1280 && slots.length === heroData.stats.length) {
-        const preset =
-          layoutPresets[Math.floor(Math.random() * layoutPresets.length)];
+        const preset = heroData.stats.map((_, index) => getCardMotion(index));
 
         slots.forEach((slot, idx) => {
           const layout = preset[idx];
@@ -163,7 +178,12 @@ export default function Hero() {
 
         <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
           {heroData.stats.map((card) => (
-            <div key={card.id} className="stat-slot will-change-transform">
+            <div
+              key={card.id}
+              className={
+                card.videoSrc ? "stat-slot will-change-transform" : "stat-slot"
+              }
+            >
               <StatCard
                 number={card.number}
                 label={card.label}
@@ -171,6 +191,7 @@ export default function Hero() {
                 videoSrc={card.videoSrc}
                 videoLabel={card.videoLabel}
                 className={card.color}
+                copyClassName={card.number ? "transform-none" : undefined}
               />
             </div>
           ))}

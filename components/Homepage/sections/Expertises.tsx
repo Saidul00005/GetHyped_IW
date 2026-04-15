@@ -40,8 +40,8 @@ export default function Expertises() {
 
       cards.forEach((card, idx) => {
         gsap.set(card, {
-          yPercent: idx === 0 ? 0 : 125,
-          autoAlpha: 1,
+          yPercent: idx === 0 ? 0 : 112,
+          opacity: 1,
           zIndex: idx + 1,
         });
       });
@@ -59,20 +59,24 @@ export default function Expertises() {
             const step = Math.max(window.innerHeight * 1.05, 700);
             return `+=${(cards.length - 1) * step}`;
           },
-          scrub: 0.8,
+          scrub: 1.25,
           pin: true,
           pinSpacing: true,
-          anticipatePin: 1,
+          anticipatePin: 0.8,
           invalidateOnRefresh: true,
         },
       });
 
       for (let index = 1; index < cards.length; index += 1) {
         timeline
-          .to(cards[index], { yPercent: 0, duration: 1.85 }, `step-${index}`)
+          .to(
+            cards[index],
+            { yPercent: 0, duration: 1.7, ease: "none" },
+            `step-${index}`,
+          )
           .to(
             cards[index - 1],
-            { autoAlpha: 0, duration: 0.8 },
+            { opacity: 0, duration: 0.8, ease: "none" },
             `step-${index}+=0.42`,
           );
       }

@@ -11,6 +11,7 @@ type StatCardProps = {
   videoSrc?: string;
   videoLabel?: string;
   className?: string;
+  copyClassName?: string;
 };
 
 export default function StatCard({
@@ -20,6 +21,7 @@ export default function StatCard({
   videoSrc,
   videoLabel,
   className,
+  copyClassName,
 }: StatCardProps) {
   return (
     <Card
@@ -38,7 +40,12 @@ export default function StatCard({
           />
         </div>
       ) : (
-        <CardContent className="flex h-full flex-col justify-between px-7">
+        <CardContent
+          className={cn(
+            "stat-card-copy flex h-full flex-col justify-between px-7",
+            copyClassName,
+          )}
+        >
           <p className="text-7xl leading-none font-extrabold tracking-tighter">
             {number}
           </p>
