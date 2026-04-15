@@ -27,14 +27,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section";
+import { companyName, navLinks } from "@/lib/data/site-data";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { label: "Expertises", href: "#" },
-  { label: "Work", href: "#" },
-  { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
-] as const;
 
 const desktopCtaClassName =
   "border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90";
@@ -310,7 +304,7 @@ export default function Navbar() {
           aria-label="Get Hyped home"
           className="justify-self-start text-4xl leading-none font-extrabold tracking-tighter whitespace-nowrap text-gh-black md:text-5xl"
         >
-          GETHYPED
+          {companyName}
         </Link>
 
         <NavigationMenu

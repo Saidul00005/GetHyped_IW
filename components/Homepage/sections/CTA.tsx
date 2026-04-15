@@ -3,10 +3,11 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail, Flame } from "lucide-react";
+import { Flame, Mail } from "lucide-react";
 import { useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
+import { contactInfo } from "@/lib/data/site-data";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,7 +44,7 @@ export default function CTA() {
         </h2>
         <div className="cta-actions mt-10 flex flex-wrap items-center justify-center gap-4">
           <ActionLink
-            href="mailto:info@gethyped.nl"
+            href={contactInfo.emailHref}
             label="Mail ons direct"
             icon={<Mail className="h-3.5 w-3.5" aria-hidden="true" />}
           />
