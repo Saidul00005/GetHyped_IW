@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,9 @@ const works = [
   {
     title: "Van nul naar vol, binnen 3 weken",
     client: "Bullit",
+    href: "#",
+    videoSrc: "/videos/Expertises/video1.mp4",
+    videoLabel: "Autoplay Bullit project preview",
     border: "border-gh-orange",
     panel: "bg-gh-orange text-white",
     media: "from-[#1f0b08] via-[#27100b] to-[#130908]",
@@ -25,6 +28,9 @@ const works = [
   {
     title: "Zacht in smaak, sterk in beeld",
     client: "Roasta",
+    href: "#",
+    videoSrc: "/videos/Expertises/video2.mp4",
+    videoLabel: "Autoplay Roasta project preview",
     border: "border-gh-blue",
     panel: "bg-gh-blue text-white",
     media: "from-[#102026] via-[#15323a] to-[#0d161a]",
@@ -33,6 +39,9 @@ const works = [
   {
     title: "Content die echt smaakt (en raakt)",
     client: "Loco",
+    href: "#",
+    videoSrc: "/videos/Expertises/video3.mp4",
+    videoLabel: "Autoplay Loco project preview",
     border: "border-gh-green",
     panel: "bg-gh-green text-white",
     media: "from-[#163026] via-[#1e4a3d] to-[#11261f]",
@@ -42,6 +51,24 @@ const works = [
 
 export default function Work() {
   const rootRef = useRef<HTMLElement>(null);
+  const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
+
+  const playVideo = useCallback((index: number) => {
+    const video = videoRefs.current[index];
+    if (!video) return;
+
+    void video.play().catch(() => {
+      // Ignore autoplay interruptions from the browser.
+    });
+  }, []);
+
+  const stopVideo = useCallback((index: number) => {
+    const video = videoRefs.current[index];
+    if (!video) return;
+
+    video.pause();
+    video.currentTime = 0;
+  }, []);
 
   useGSAP(
     () => {
@@ -93,15 +120,47 @@ export default function Work() {
         </div>
 
         <div className="work-grid mt-12 grid grid-cols-1 gap-6 md:mt-16 md:grid-cols-2 xl:grid-cols-3 xl:items-end">
-          {works.map((item) => (
+          {works.map((item, index) => (
             <div key={item.title} className={`${item.offset} xl:px-2`}>
               <Card
                 className={`work-card work-card-anim group relative block overflow-hidden rounded-4xl border-[6px] ${item.border} origin-bottom-left transform-gpu bg-transparent py-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-y-2 hover:-rotate-2`}
               >
-                <Link href="#" className="block">
-                  <div
-                    className={`aspect-4/5 bg-linear-to-br ${item.media} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]`}
-                  />
+                <Link
+                  href={item.href}
+                  className="block"
+                  onMouseEnter={() => {
+                    playVideo(index);
+                  }}
+                  onMouseLeave={() => {
+                    stopVideo(index);
+                  }}
+                  onFocus={() => {
+                    playVideo(index);
+                  }}
+                  onBlur={() => {
+                    stopVideo(index);
+                  }}
+                >
+                  <div className="relative aspect-4/5 overflow-hidden">
+                    <div
+                      className={`absolute inset-0 bg-linear-to-br ${item.media} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02]`}
+                    />
+                    <video
+                      ref={(node) => {
+                        videoRefs.current[index] = node;
+                      }}
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      disablePictureInPicture
+                      aria-label={item.videoLabel}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    >
+                      <source src={item.videoSrc} type="video/mp4" />
+                    </video>
+                    <div className="absolute inset-0 bg-black/12" />
+                  </div>
                   <CardContent
                     className={`info absolute right-3 bottom-3 left-3 rounded-[1.25rem] p-4 pt-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 sm:right-4 sm:bottom-4 sm:left-4 sm:pt-7 ${item.panel}`}
                     style={{
