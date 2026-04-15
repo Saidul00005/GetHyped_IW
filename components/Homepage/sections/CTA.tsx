@@ -7,7 +7,7 @@ import { Flame, Mail } from "lucide-react";
 import { useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
-import { contactInfo } from "@/lib/data/site-data";
+import { ctaData } from "@/lib/data/homepage-data";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -40,17 +40,17 @@ export default function CTA() {
     >
       <div className="mx-auto max-w-400">
         <h2 className="text-cta leading-[0.9] font-extrabold tracking-tight text-gh-black">
-          <span className="cta-line block">Let&apos;s Get Hyped!</span>
+          <span className="cta-line block">{ctaData.heading}</span>
         </h2>
         <div className="cta-actions mt-10 flex flex-wrap items-center justify-center gap-4">
           <ActionLink
-            href={contactInfo.emailHref}
-            label="Mail ons direct"
+            href={ctaData.primaryAction.href}
+            label={ctaData.primaryAction.label}
             icon={<Mail className="h-3.5 w-3.5" aria-hidden="true" />}
           />
           <ActionLink
-            href="#"
-            label="Get Results"
+            href={ctaData.secondaryAction.href}
+            label={ctaData.secondaryAction.label}
             variant="ghSolid"
             icon={<Flame className="h-3.5 w-3.5" aria-hidden="true" />}
           />

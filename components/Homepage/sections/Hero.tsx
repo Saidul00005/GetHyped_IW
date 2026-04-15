@@ -5,47 +5,7 @@ import { gsap } from "gsap";
 import { useRef } from "react";
 
 import StatCard from "@/components/Homepage/sections/shared/StatCard";
-
-type HeroStatCard = {
-  id: string;
-  number?: string;
-  label?: string;
-  sub?: string;
-  videoSrc?: string;
-  videoLabel?: string;
-  color: string;
-};
-
-const statCards: HeroStatCard[] = [
-  {
-    id: "views",
-    number: "10M+",
-    label: "Organische views",
-    sub: "Groei door slimme content",
-    color: "bg-gh-blue",
-  },
-  {
-    id: "brands-video",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274196/video1_kczmxz.mp4",
-    videoLabel: "Autoplay brand showcase video",
-    color: "bg-gh-orange text-white",
-  },
-  {
-    id: "campaigns",
-    number: "60+",
-    label: "Campagnes per maand",
-    sub: "Altijd live. Altijd doorpakken.",
-    color: "bg-gh-green",
-  },
-  {
-    id: "creative-video",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274201/video2_xrun2e.mp4",
-    videoLabel: "Autoplay creative energy video",
-    color: "bg-[#1f2937] text-white",
-  },
-];
+import { heroData } from "@/lib/data/homepage-data";
 
 const layoutPresets = [
   [
@@ -82,7 +42,7 @@ export default function Hero() {
       const slots = gsap.utils.toArray<HTMLElement>(".stat-slot");
       let cleanupHandlers: Array<() => void> = [];
 
-      if (window.innerWidth >= 1280 && slots.length === statCards.length) {
+      if (window.innerWidth >= 1280 && slots.length === heroData.stats.length) {
         const preset =
           layoutPresets[Math.floor(Math.random() * layoutPresets.length)];
 
@@ -185,22 +145,24 @@ export default function Hero() {
     >
       <div className="mx-auto max-w-400">
         <div className="leading-[0.92] font-extrabold tracking-tighter text-gh-black">
-          <span className="hero-line block text-5xl md:text-7xl lg:text-9xl">
-            Get Hyped. Get
-          </span>
-          <span className="hero-line block text-5xl md:text-7xl lg:text-9xl">
-            Noticed. Get Results.
-          </span>
+          {heroData.headlineLines.map((line) => (
+            <span
+              key={line}
+              className="hero-line block text-5xl md:text-7xl lg:text-9xl"
+            >
+              {line}
+            </span>
+          ))}
         </div>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
           <p className="hero-sub max-w-sm text-lg leading-[1.4] font-semibold tracking-tight text-gh-black md:max-w-md md:text-2xl lg:max-w-lg lg:text-4xl">
-            Klaar met gokken op content die niets oplevert?
+            {heroData.subheadline}
           </p>
         </div>
 
         <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
-          {statCards.map((card, index) => (
+          {heroData.stats.map((card) => (
             <div key={card.id} className="stat-slot will-change-transform">
               <StatCard
                 number={card.number}

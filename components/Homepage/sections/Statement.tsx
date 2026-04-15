@@ -9,6 +9,7 @@ import { useCallback, useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Button } from "@/components/ui/button";
+import { statementData } from "@/lib/data/homepage-data";
 import { scrollToSection } from "@/lib/scroll-to-section";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -57,30 +58,27 @@ export default function Statement() {
     <section ref={rootRef} id="about" className="px-6 py-28 md:px-10 md:py-36">
       <div className="mx-auto max-w-400">
         <h2 className="statement-left max-w-312.5 text-[2.35rem] leading-[1.02] font-extrabold tracking-tight md:text-[3.6rem] xl:text-[4.3rem]">
-          Wij maken content die opvalt. Die blijft hangen. Die jouw doelgroep
-          raakt en jouw merk in beweging brengt.
+          {statementData.title}
         </h2>
 
         <div className="statement-right mt-16 grid grid-cols-1 items-end gap-10 lg:grid-cols-[220px_minmax(0,1fr)_auto]">
           <div className="relative h-90 w-60 overflow-hidden rounded-2xl">
             <Image
-              src="/images/Homepage/Statement/Image1.jpg"
-              alt="Portrait visual for the statement section"
+              src={statementData.image.src}
+              alt={statementData.image.alt}
               fill
               className="object-cover"
-              sizes="220px"
+              sizes={statementData.image.sizes}
             />
           </div>
 
           <div className="max-w-175">
             <p className="text-xl leading-[1.2] font-bold tracking-tight md:text-3xl">
-              We stoppen niet bij mooie plaatjes en vette beelden. We maken het
-              meetbaar. Zo weet je precies wat werkt en wat niet. Nooit meer
-              content zonder strategie. Nooit meer content zonder resultaat.
+              {statementData.body}
             </p>
             <ActionLink
-              href="#contact"
-              label="Leer ons kennen"
+              href={statementData.cta.href}
+              label={statementData.cta.label}
               className="mt-6"
             />
           </div>

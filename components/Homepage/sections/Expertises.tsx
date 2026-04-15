@@ -10,63 +10,9 @@ import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import AdaptiveVideo from "@/components/Homepage/sections/shared/AdaptiveVideo";
 import FeatureCard from "@/components/Homepage/sections/shared/FeatureCard";
 import SectionTag from "@/components/Homepage/sections/shared/SectionTag";
+import { expertiseData } from "@/lib/data/homepage-data";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const expertises = [
-  {
-    num: "01",
-    name: "Social strategy",
-    title: "Slimme strategie. Sterke start.",
-    desc: "We duiken diep in jouw merk, doelgroep en doelen. En vertalen data naar een duidelijk plan met formats die echt impact maken.",
-    cta: "Meer over social strategie",
-    ctaVariant: "ghSolid",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274471/video1_fews8d.mp4",
-    videoLabel: "Autoplay social strategy video",
-    bg: "bg-white",
-  },
-  {
-    num: "02",
-    name: "Content creation",
-    title: "Content die opvalt en raakt.",
-    desc: "We maken content die opvalt. Blijft hangen. En jouw doelgroep raakt. Creatief, snel en energiek.",
-    cta: "Meer over content creatie",
-    ctaVariant: "ghOutline",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274455/video2_lr1hih.mp4",
-    videoLabel: "Autoplay content creation video",
-    bg: "bg-[#ffc3ff]",
-  },
-  {
-    num: "03",
-    name: "Activation",
-    title: "Zichtbaar waar en wanneer het telt.",
-    desc: "De juiste content verdient het om gezien te worden. We verspreiden de content waar jouw doelgroep is.",
-    cta: "Meer over activatie",
-    ctaVariant: "ghOutline",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274434/video3_yasusx.mp4",
-    videoLabel: "Autoplay activation video",
-    bg: "bg-gh-green",
-  },
-  {
-    num: "04",
-    name: "Data",
-    title: "Inzichten die impact maken.",
-    desc: "We duiken in de cijfers om te snappen wat echt werkt en sturen jouw content scherp bij.",
-    cta: "Meer over data",
-    ctaVariant: "ghOutline",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274427/video4_uzvaeq.mp4",
-    videoLabel: "Autoplay data insights video",
-    bg: "bg-gh-blue",
-  },
-] as const;
 
 export default function Expertises() {
   const rootRef = useRef<HTMLElement>(null);
@@ -137,7 +83,7 @@ export default function Expertises() {
   return (
     <section id="expertises" ref={rootRef} className="px-6 py-10 md:px-10">
       <div className="mx-auto flex max-w-400 flex-col gap-6 md:relative md:h-[calc(100vh-6rem)] md:overflow-hidden">
-        {expertises.map((item, index) => (
+        {expertiseData.map((item, index) => (
           <FeatureCard
             key={item.num}
             className={`exp-card ${item.bg} transition-shadow duration-200 hover:shadow-[0_22px_60px_rgba(0,0,0,0.08)] md:absolute md:inset-0 md:h-full`}

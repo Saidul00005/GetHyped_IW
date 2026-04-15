@@ -13,47 +13,9 @@ import AdaptiveVideo, {
 } from "@/components/Homepage/sections/shared/AdaptiveVideo";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { workData } from "@/lib/data/homepage-data";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const works = [
-  {
-    title: "Van nul naar vol, binnen 3 weken",
-    client: "Bullit",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274281/video1_drmvzi.mp4",
-    videoLabel: "Autoplay Bullit project preview",
-    border: "border-gh-orange",
-    panel: "bg-gh-orange text-white",
-    media: "from-[#1f0b08] via-[#27100b] to-[#130908]",
-    offset: "xl:translate-y-14",
-  },
-  {
-    title: "Zacht in smaak, sterk in beeld",
-    client: "Roasta",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274268/video2_qs70e0.mp4",
-    videoLabel: "Autoplay Roasta project preview",
-    border: "border-gh-blue",
-    panel: "bg-gh-blue text-white",
-    media: "from-[#102026] via-[#15323a] to-[#0d161a]",
-    offset: "xl:translate-y-0",
-  },
-  {
-    title: "Content die echt smaakt (en raakt)",
-    client: "Loco",
-    href: "#",
-    videoSrc:
-      "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274262/video3_dmyduj.mp4",
-    videoLabel: "Autoplay Loco project preview",
-    border: "border-gh-green",
-    panel: "bg-gh-green text-white",
-    media: "from-[#163026] via-[#1e4a3d] to-[#11261f]",
-    offset: "xl:-translate-y-10",
-  },
-] as const;
 
 export default function Work() {
   const rootRef = useRef<HTMLElement>(null);
@@ -109,21 +71,20 @@ export default function Work() {
       <div className="mx-auto max-w-400">
         <div className="work-header max-w-xl">
           <h2 className="text-[4rem] leading-[0.9] font-extrabold tracking-tighter md:text-[6rem]">
-            Content dat scoort.
+            {workData.heading}
           </h2>
           <p className="mt-5 max-w-xl text-[1.5rem] leading-[1.12] font-bold tracking-tight md:text-[2.2rem]">
-            Wij vertellen jouw verhaal. Op een manier die echt past bij jouw
-            doelgroep. Met creatieve content die werkt en het verschil maakt.
+            {workData.body}
           </p>
           <ActionLink
-            href="#"
-            label="Bekijk al ons werk"
+            href={workData.cta.href}
+            label={workData.cta.label}
             className="mt-5 w-fit text-base md:text-lg"
           />
         </div>
 
         <div className="work-grid mt-12 grid grid-cols-1 gap-6 md:mt-16 md:grid-cols-2 xl:grid-cols-3 xl:items-end">
-          {works.map((item, index) => (
+          {workData.items.map((item, index) => (
             <div key={item.title} className={`${item.offset} xl:px-2`}>
               <Card
                 className={`work-card work-card-anim group relative block overflow-hidden rounded-4xl border-[6px] ${item.border} origin-bottom-left transform-gpu bg-transparent py-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:z-10 hover:-translate-y-2 hover:-rotate-2`}

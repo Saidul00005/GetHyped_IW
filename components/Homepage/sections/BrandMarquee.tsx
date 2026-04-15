@@ -7,22 +7,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { brandMarqueeData } from "@/lib/data/homepage-data";
 
 gsap.registerPlugin(ScrollTrigger, Draggable);
 
-const brands = [
-  "Tho",
-  "De Talententuin",
-  "Zwarte Cross",
-  "Bullit",
-  "Morssinkhof",
-  "KNLTB",
-  "SRHK",
-] as const;
-
 const marqueeBrands = [
-  ...brands.map((name) => ({ id: `${name}-set-1`, name })),
-  ...brands.map((name) => ({ id: `${name}-set-2`, name })),
+  ...brandMarqueeData.brands.map((name) => ({ id: `${name}-set-1`, name })),
+  ...brandMarqueeData.brands.map((name) => ({ id: `${name}-set-2`, name })),
 ];
 const MARQUEE_SPEED = 84;
 
@@ -86,7 +77,7 @@ export default function BrandMarquee() {
         if (!items.length) return;
 
         setWidth = items
-          .slice(0, brands.length)
+          .slice(0, brandMarqueeData.brands.length)
           .reduce((total, item) => total + item.offsetWidth, 0);
 
         if (!setWidth) return;
@@ -149,7 +140,7 @@ export default function BrandMarquee() {
     <section ref={rootRef} className="px-6 py-24 md:px-10">
       <div className="mx-auto max-w-400">
         <h2 className="brand-title max-w-150 text-display leading-[0.9] font-extrabold tracking-tighter text-gh-black">
-          These brands got hyped.
+          {brandMarqueeData.heading}
         </h2>
       </div>
 
