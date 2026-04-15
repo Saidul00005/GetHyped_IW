@@ -1,3 +1,4 @@
+import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import BrandMarquee from "@/components/sections/BrandMarquee";
 import CTA from "@/components/sections/CTA";
@@ -16,6 +17,7 @@ export default function Home() {
       <Work />
       <BrandMarquee />
       <CTA />
+      <Footer />
     </main>
   );
 }
