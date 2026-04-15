@@ -26,8 +26,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section";
 import { companyName, navLinks } from "@/lib/data/site-data";
+import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
 
 const desktopCtaClassName =
@@ -42,8 +42,11 @@ export default function Navbar() {
   const isClosingRef = useRef(false);
   const openTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const prefersReducedMotionRef = useRef(false);
+  const lastScrollYRef = useRef(0);
+  const navbarHiddenRef = useRef(false);
   const desktopLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const desktopHighlightRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const headerRef = useRef<HTMLElement>(null);
   const sheetContentRef = useRef<HTMLDivElement>(null);
   const menuHeaderRef = useRef<HTMLDivElement>(null);
   const menuCtaRef = useRef<HTMLDivElement>(null);
@@ -55,10 +58,63 @@ export default function Navbar() {
       prefersReducedMotionRef.current = motionQuery.matches;
     };
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+      const header = headerRef.current;
+
+      setScrolled(currentScrollY > 30);
+
+      if (!header || open) {
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY <= 24) {
+        navbarHiddenRef.current = false;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          y: 0,
+          autoAlpha: 1,
+          duration: prefersReducedMotionRef.current ? 0 : 0.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (Math.abs(scrollDelta) < 6) {
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (scrollDelta > 0 && !navbarHiddenRef.current) {
+        navbarHiddenRef.current = true;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          yPercent: -130,
+          autoAlpha: 0.94,
+          duration: prefersReducedMotionRef.current ? 0 : 0.22,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      } else if (scrollDelta < 0 && navbarHiddenRef.current) {
+        navbarHiddenRef.current = false;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          yPercent: 0,
+          autoAlpha: 1,
+          duration: prefersReducedMotionRef.current ? 0 : 0.26,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     updateMotionPreference();
+    lastScrollYRef.current = window.scrollY;
     handleScroll();
 
     motionQuery.addEventListener("change", updateMotionPreference);
@@ -69,7 +125,22 @@ export default function Navbar() {
       motionQuery.removeEventListener("change", updateMotionPreference);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [open]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header || !open) return;
+
+    navbarHiddenRef.current = false;
+    gsap.killTweensOf(header);
+    gsap.to(header, {
+      yPercent: 0,
+      autoAlpha: 1,
+      duration: prefersReducedMotionRef.current ? 0 : 0.2,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  }, [open]);
 
   useEffect(() => {
     const highlights = desktopHighlightRefs.current.filter(
@@ -297,7 +368,10 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 px-6 pt-5 md:px-10">
+    <header
+      ref={headerRef}
+      className="fixed top-0 right-0 left-0 z-50 px-6 pt-5 will-change-transform md:px-10"
+    >
       <div className="mx-auto flex w-full max-w-400 items-center justify-between gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
         <Link
           href="/"
