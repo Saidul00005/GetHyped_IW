@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Mail } from "lucide-react";
 import { useRef } from "react";
 
-import ActionLink from "@/components/sections/shared/ActionLink";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { useRef } from "react";
 
-import StatCard from "@/components/sections/shared/StatCard";
+import StatCard from "@/components/Homepage/sections/shared/StatCard";
 
 const statCards = [
   {

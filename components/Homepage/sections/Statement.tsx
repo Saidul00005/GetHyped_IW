@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown } from "lucide-react";
 import { useCallback, useRef } from "react";
 
-import ActionLink from "@/components/sections/shared/ActionLink";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Button } from "@/components/ui/button";
 import { scrollToSection } from "@/lib/scroll-to-section";
 

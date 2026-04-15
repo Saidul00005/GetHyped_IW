@@ -5,9 +5,9 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 
-import ActionLink from "@/components/sections/shared/ActionLink";
-import FeatureCard from "@/components/sections/shared/FeatureCard";
-import SectionTag from "@/components/sections/shared/SectionTag";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
+import FeatureCard from "@/components/Homepage/sections/shared/FeatureCard";
+import SectionTag from "@/components/Homepage/sections/shared/SectionTag";
 
 gsap.registerPlugin(ScrollTrigger);
 

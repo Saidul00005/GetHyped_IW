@@ -7,7 +7,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 
-import ActionLink from "@/components/sections/shared/ActionLink";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 

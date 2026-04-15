@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import ActionLink from "@/components/sections/shared/ActionLink";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
