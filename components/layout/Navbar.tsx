@@ -30,10 +30,10 @@ import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section"
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Expertises", href: "#expertises" },
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Expertises", href: "#" },
+  { label: "Work", href: "#" },
+  { label: "About", href: "#" },
+  { label: "Contact", href: "#" },
 ] as const;
 
 const desktopCtaClassName =
@@ -264,7 +264,7 @@ export default function Navbar() {
         >
           <NavigationMenuList className="gap-4">
             {navLinks.map((link) => (
-              <NavigationMenuItem key={link.href}>
+              <NavigationMenuItem key={link.label}>
                 <NavigationMenuLink asChild className="text-sm! xl:text-base!">
                   <Link
                     href={link.href}
