@@ -471,7 +471,7 @@ export default function Navbar() {
             <nav className="flex flex-col gap-3 px-6 pt-2 pb-6">
               {navLinks.map((link, index) => (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   ref={(node) => {
                     menuLinkRefs.current[index] = node;
                   }}
