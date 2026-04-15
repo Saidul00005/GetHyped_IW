@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 import { useRef } from "react";
 
 import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
@@ -19,6 +20,9 @@ const expertises = [
     desc: "We duiken diep in jouw merk, doelgroep en doelen. En vertalen data naar een duidelijk plan met formats die echt impact maken.",
     cta: "Meer over social strategie",
     ctaVariant: "ghSolid",
+    href: "#",
+    videoSrc: "/videos/Expertises/video1.mp4",
+    videoLabel: "Autoplay social strategy video",
     bg: "bg-white",
   },
   {
@@ -28,6 +32,9 @@ const expertises = [
     desc: "We maken content die opvalt. Blijft hangen. En jouw doelgroep raakt. Creatief, snel en energiek.",
     cta: "Meer over content creatie",
     ctaVariant: "ghOutline",
+    href: "#",
+    videoSrc: "/videos/Expertises/video2.mp4",
+    videoLabel: "Autoplay content creation video",
     bg: "bg-[#ffc3ff]",
   },
   {
@@ -37,6 +44,9 @@ const expertises = [
     desc: "De juiste content verdient het om gezien te worden. We verspreiden de content waar jouw doelgroep is.",
     cta: "Meer over activatie",
     ctaVariant: "ghOutline",
+    href: "#",
+    videoSrc: "/videos/Expertises/video3.mp4",
+    videoLabel: "Autoplay activation video",
     bg: "bg-gh-green",
   },
   {
@@ -46,6 +56,9 @@ const expertises = [
     desc: "We duiken in de cijfers om te snappen wat echt werkt en sturen jouw content scherp bij.",
     cta: "Meer over data",
     ctaVariant: "ghOutline",
+    href: "#",
+    videoSrc: "/videos/Expertises/video4.mp4",
+    videoLabel: "Autoplay data insights video",
     bg: "bg-gh-blue",
   },
 ] as const;
@@ -122,39 +135,63 @@ export default function Expertises() {
         {expertises.map((item, index) => (
           <FeatureCard
             key={item.num}
-            className={`exp-card ${item.bg} md:absolute md:inset-0 md:h-full`}
+            className={`exp-card ${item.bg} transition-shadow duration-200 hover:shadow-[0_22px_60px_rgba(0,0,0,0.08)] md:absolute md:inset-0 md:h-full`}
           >
-            <div className="mb-6 flex items-center justify-between">
-              <SectionTag>Expertise</SectionTag>
-              <span
-                className={`text-8xl leading-none font-extrabold tracking-tighter ${
-                  index === 0 || index === 1 ? "text-black/25" : "text-white/55"
-                }`}
-              >
-                {item.num}
-              </span>
-            </div>
-
-            <h2 className="text-display leading-[0.95] font-extrabold tracking-tighter text-gh-black">
-              {item.name}
-            </h2>
-
-            <div className="mt-24 grid grid-cols-1 items-end gap-8 md:grid-cols-2">
-              <div>
-                <h3 className="text-5xl leading-tight font-extrabold tracking-tight text-gh-black">
-                  {item.title}
-                </h3>
-                <p className="mt-4 max-w-xl text-3xl leading-[1.2] font-semibold text-black/85">
-                  {item.desc}
-                </p>
-                <ActionLink
-                  href="#"
-                  label={item.cta}
-                  variant={item.ctaVariant}
-                  className="mt-6"
-                />
+            <Link
+              href={item.href}
+              aria-label={`${item.name} - ${item.cta}`}
+              className="absolute inset-0 z-0 rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gh-orange/45"
+            />
+            <div className="relative z-10 pointer-events-none">
+              <div className="mb-6 flex items-center justify-between">
+                <SectionTag>Expertise</SectionTag>
+                <span
+                  className={`text-8xl leading-none font-extrabold tracking-tighter ${
+                    index === 0 || index === 1
+                      ? "text-black/25"
+                      : "text-white/55"
+                  }`}
+                >
+                  {item.num}
+                </span>
               </div>
-              <div className="ml-auto h-90 w-full max-w-95 rounded-[28px] border-4 border-white bg-black/10" />
+
+              <h2 className="text-display leading-[0.95] font-extrabold tracking-tighter text-gh-black">
+                {item.name}
+              </h2>
+
+              <div className="mt-24 grid grid-cols-1 items-end gap-8 md:grid-cols-2">
+                <div>
+                  <h3 className="text-5xl leading-tight font-extrabold tracking-tight text-gh-black">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 max-w-xl text-3xl leading-[1.2] font-semibold text-black/85">
+                    {item.desc}
+                  </p>
+                  <div className="pointer-events-auto">
+                    <ActionLink
+                      href={item.href}
+                      label={item.cta}
+                      variant={item.ctaVariant}
+                      className="mt-6"
+                    />
+                  </div>
+                </div>
+                <div className="relative ml-auto h-110 w-full max-w-95 overflow-hidden rounded-[28px] border-4 border-white bg-black/10">
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    disablePictureInPicture
+                    aria-label={item.videoLabel}
+                    className="h-full w-full object-cover"
+                  >
+                    <source src={item.videoSrc} type="video/mp4" />
+                  </video>
+                </div>
+              </div>
             </div>
           </FeatureCard>
         ))}
