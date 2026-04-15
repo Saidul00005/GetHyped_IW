@@ -11,17 +11,7 @@ import SectionTag from "@/components/Homepage/sections/shared/SectionTag";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type Expertise = {
-  num: string;
-  name: string;
-  title: string;
-  desc: string;
-  cta: string;
-  ctaVariant?: "ghSolid" | "ghOutline";
-  bg: string;
-};
-
-const expertises: Expertise[] = [
+const expertises = [
   {
     num: "01",
     name: "Social strategy",
