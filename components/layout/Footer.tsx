@@ -1,17 +1,18 @@
 "use client";
 
+import { gsap } from "gsap";
 import { type LucideIcon, Music2 } from "lucide-react";
 import Link from "next/link";
-import { type MouseEvent, useCallback } from "react";
+import { type MouseEvent, useCallback, useEffect, useRef } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { scrollToSection } from "@/lib/scroll-to-section";
 import {
   companyName,
   contactInfo,
   footerMeta,
   navLinks,
 } from "@/lib/data/site-data";
+import { scrollToSection } from "@/lib/scroll-to-section";
 
 const socialLinks: Array<{
   label: string;
@@ -25,6 +26,38 @@ const socialLinks: Array<{
 ];
 
 export default function Footer() {
+  const prefersReducedMotionRef = useRef(false);
+  const footerNavLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const footerNavHighlightRefs = useRef<Array<HTMLSpanElement | null>>([]);
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotionPreference = () => {
+      prefersReducedMotionRef.current = motionQuery.matches;
+    };
+    const highlights = footerNavHighlightRefs.current.filter(
+      (node): node is HTMLSpanElement => Boolean(node),
+    );
+
+    updateMotionPreference();
+    motionQuery.addEventListener("change", updateMotionPreference);
+
+    gsap.set(highlights, {
+      autoAlpha: 0,
+      scaleX: 0.72,
+      x: -8,
+      transformOrigin: "left center",
+    });
+
+    return () => {
+      motionQuery.removeEventListener("change", updateMotionPreference);
+      gsap.killTweensOf([
+        ...footerNavLinkRefs.current.filter(Boolean),
+        ...highlights,
+      ]);
+    };
+  }, []);
+
   const createNavClickHandler = useCallback(
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       if (!href.startsWith("#")) return;
@@ -37,6 +70,42 @@ export default function Footer() {
       if (!didScroll) return;
 
       event.preventDefault();
+    },
+    [],
+  );
+
+  const animateFooterNavHover = useCallback(
+    (index: number, isEntering: boolean) => {
+      const link = footerNavLinkRefs.current[index];
+      const highlight = footerNavHighlightRefs.current[index];
+
+      if (!link || !highlight) return;
+
+      gsap.killTweensOf([link, highlight]);
+
+      if (prefersReducedMotionRef.current) {
+        gsap.set(link, { y: 0, color: "var(--gh-black)" });
+        gsap.set(highlight, {
+          autoAlpha: isEntering ? 1 : 0,
+          scaleX: isEntering ? 1 : 0.72,
+          x: isEntering ? 0 : -8,
+        });
+        return;
+      }
+
+      gsap.to(link, {
+        y: isEntering ? -1 : 0,
+        color: "var(--gh-black)",
+        duration: isEntering ? 0.16 : 0.12,
+        ease: "power2.out",
+      });
+      gsap.to(highlight, {
+        autoAlpha: isEntering ? 1 : 0,
+        scaleX: isEntering ? 1 : 0.72,
+        x: isEntering ? 0 : -8,
+        duration: isEntering ? 0.18 : 0.12,
+        ease: "power2.out",
+      });
     },
     [],
   );
@@ -55,7 +124,7 @@ export default function Footer() {
         <div className="grid gap-6 pb-2 md:grid-cols-[minmax(0,1fr)_220px] md:gap-x-12">
           <div className="grid content-start gap-6">
             <div className="flex flex-wrap items-center gap-2">
-              {navLinks.map((link) => (
+              {navLinks.map((link, index) => (
                 <Badge
                   key={link.label}
                   variant="outline"
@@ -63,10 +132,33 @@ export default function Footer() {
                   className="h-auto rounded-lg border-black/15 bg-white px-3 py-1.5 text-sm font-semibold text-gh-black"
                 >
                   <Link
+                    ref={(node) => {
+                      footerNavLinkRefs.current[index] = node;
+                    }}
                     href={link.href}
                     onClick={createNavClickHandler(link.href)}
+                    onMouseEnter={() => {
+                      animateFooterNavHover(index, true);
+                    }}
+                    onMouseLeave={() => {
+                      animateFooterNavHover(index, false);
+                    }}
+                    onFocus={() => {
+                      animateFooterNavHover(index, true);
+                    }}
+                    onBlur={() => {
+                      animateFooterNavHover(index, false);
+                    }}
+                    className="relative inline-flex items-center overflow-hidden rounded-lg px-3 py-1.5 will-change-transform"
                   >
-                    {link.label}
+                    <span
+                      ref={(node) => {
+                        footerNavHighlightRefs.current[index] = node;
+                      }}
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-lg bg-[linear-gradient(110deg,var(--gh-pink)_0%,var(--gh-orange)_100%)] opacity-0 transform-[translateX(-8px)_scaleX(0.72)] origin-[left_center] will-change-transform"
+                    />
+                    <span className="relative z-10">{link.label}</span>
                   </Link>
                 </Badge>
               ))}

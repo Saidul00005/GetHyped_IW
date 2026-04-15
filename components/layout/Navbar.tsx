@@ -417,7 +417,7 @@ export default function Navbar() {
                         desktopHighlightRefs.current[index] = node;
                       }}
                       aria-hidden="true"
-                      className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,var(--gh-pink)_0%,var(--gh-orange)_100%)]"
+                      className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,var(--gh-pink)_0%,var(--gh-orange)_100%)] opacity-0 transform-[translateX(-8px)_scaleX(0.72)] origin-[left_center] will-change-transform"
                     />
                     <span className="relative z-10">{link.label}</span>
                   </Link>
