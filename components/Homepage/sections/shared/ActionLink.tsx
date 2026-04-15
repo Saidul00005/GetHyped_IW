@@ -3,10 +3,12 @@
 import { gsap } from "gsap";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import type * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
+import { queueSectionScroll, scrollToSection } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
 
 type ActionLinkProps = {
@@ -27,6 +29,8 @@ export default function ActionLink({
   onClick,
 }: ActionLinkProps) {
   const isSolid = variant === "ghSolid";
+  const pathname = usePathname();
+  const router = useRouter();
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const iconRef = useRef<HTMLSpanElement>(null);
   const prefersReducedMotionRef = useRef(false);
@@ -90,6 +94,39 @@ export default function ActionLink({
     });
   }, []);
 
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      onClick?.(event);
+      if (event.defaultPrevented) return;
+
+      if (href.startsWith("/#")) {
+        const sectionId = href.slice(2);
+        if (!sectionId) return;
+
+        event.preventDefault();
+
+        if (pathname === "/" && scrollToSection(sectionId)) {
+          return;
+        }
+
+        queueSectionScroll(sectionId);
+        router.push("/");
+        return;
+      }
+
+      if (href.startsWith("#")) {
+        const sectionId = href.slice(1);
+        if (!sectionId) return;
+
+        const didScroll = scrollToSection(sectionId);
+        if (!didScroll) return;
+
+        event.preventDefault();
+      }
+    },
+    [href, onClick, pathname, router],
+  );
+
   return (
     <Button
       asChild
@@ -100,7 +137,7 @@ export default function ActionLink({
       <Link
         ref={buttonRef}
         href={href}
-        onClick={onClick}
+        onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}

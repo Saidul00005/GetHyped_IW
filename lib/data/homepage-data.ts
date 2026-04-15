@@ -68,7 +68,7 @@ export const expertiseData = [
     desc: "We duiken diep in jouw merk, doelgroep en doelen. En vertalen data naar een duidelijk plan met formats die echt impact maken.",
     cta: "Meer over social strategie",
     ctaVariant: "ghSolid",
-    href: "#",
+    href: "/expertises/social-strategy",
     videoSrc:
       "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274471/video1_fews8d.mp4",
     videoLabel: "Autoplay social strategy video",
@@ -81,7 +81,7 @@ export const expertiseData = [
     desc: "We maken content die opvalt. Blijft hangen. En jouw doelgroep raakt. Creatief, snel en energiek.",
     cta: "Meer over content creatie",
     ctaVariant: "ghOutline",
-    href: "#",
+    href: "/expertises/content-creation",
     videoSrc:
       "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274455/video2_lr1hih.mp4",
     videoLabel: "Autoplay content creation video",
@@ -94,7 +94,7 @@ export const expertiseData = [
     desc: "De juiste content verdient het om gezien te worden. We verspreiden de content waar jouw doelgroep is.",
     cta: "Meer over activatie",
     ctaVariant: "ghOutline",
-    href: "#",
+    href: "/expertises/activation",
     videoSrc:
       "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274434/video3_yasusx.mp4",
     videoLabel: "Autoplay activation video",
@@ -107,7 +107,7 @@ export const expertiseData = [
     desc: "We duiken in de cijfers om te snappen wat echt werkt en sturen jouw content scherp bij.",
     cta: "Meer over data",
     ctaVariant: "ghOutline",
-    href: "#",
+    href: "/expertises/data",
     videoSrc:
       "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274427/video4_uzvaeq.mp4",
     videoLabel: "Autoplay data insights video",
@@ -119,14 +119,14 @@ export const workData = {
   heading: "Content dat scoort.",
   body: "Wij vertellen jouw verhaal. Op een manier die echt past bij jouw doelgroep. Met creatieve content die werkt en het verschil maakt.",
   cta: {
-    href: "#",
+    href: "/work",
     label: "Bekijk al ons werk",
   },
   items: [
     {
       title: "Van nul naar vol, binnen 3 weken",
       client: "Bullit",
-      href: "#",
+      href: "/work/bullit",
       videoSrc:
         "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274281/video1_drmvzi.mp4",
       videoLabel: "Autoplay Bullit project preview",
@@ -138,7 +138,7 @@ export const workData = {
     {
       title: "Zacht in smaak, sterk in beeld",
       client: "Roasta",
-      href: "#",
+      href: "/work/roasta",
       videoSrc:
         "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274268/video2_qs70e0.mp4",
       videoLabel: "Autoplay Roasta project preview",
@@ -150,7 +150,7 @@ export const workData = {
     {
       title: "Content die echt smaakt (en raakt)",
       client: "Loco",
-      href: "#",
+      href: "/work/loco",
       videoSrc:
         "https://res.cloudinary.com/dux2glgb3/video/upload/v1776274262/video3_dmyduj.mp4",
       videoLabel: "Autoplay Loco project preview",

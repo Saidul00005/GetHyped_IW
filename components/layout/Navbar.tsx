@@ -3,6 +3,7 @@
 import { gsap } from "gsap";
 import { Flame, Menu } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   type MouseEvent,
   useCallback,
@@ -37,6 +38,7 @@ const mobileLinkClassName =
   "rounded-2xl border border-black/8 bg-white/78 px-4 py-3 text-lg font-semibold shadow-[0_10px_24px_rgba(0,0,0,0.04)] hover:bg-white";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const isClosingRef = useRef(false);
@@ -245,6 +247,27 @@ export default function Navbar() {
     [animateMenuClose, scrollToSection],
   );
 
+  const handleHomeClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      if (pathname !== "/") return;
+
+      event.preventDefault();
+
+      if (window.__lenis) {
+        window.__lenis.scrollTo(0, {
+          duration: prefersReducedMotionRef.current ? 0 : 1.05,
+        });
+        return;
+      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
+    },
+    [pathname],
+  );
+
   const animateDesktopNavHover = useCallback(
     (index: number, isEntering: boolean) => {
       const link = desktopLinkRefs.current[index];
@@ -375,6 +398,7 @@ export default function Navbar() {
       <div className="mx-auto flex w-full max-w-400 items-center justify-between gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
         <Link
           href="/"
+          onClick={handleHomeClick}
           aria-label="Get Hyped home"
           className="justify-self-start text-4xl leading-none font-extrabold tracking-tighter whitespace-nowrap text-gh-black md:text-5xl"
         >
@@ -428,11 +452,11 @@ export default function Navbar() {
         </NavigationMenu>
 
         <ActionLink
-          href="#contact"
+          href="/get-results"
           label="Get Results"
           icon={<Flame className="h-4 w-4" aria-hidden="true" />}
           variant="ghSolid"
-          onClick={createNavClickHandler("#contact")}
+          onClick={createNavClickHandler("/get-results")}
           className={cn(
             "hidden justify-self-end xl:inline-flex",
             desktopCtaClassName,
@@ -485,11 +509,11 @@ export default function Navbar() {
 
               <div ref={menuCtaRef} className="pt-2">
                 <ActionLink
-                  href="#contact"
+                  href="/get-results"
                   label="Get Results"
                   icon={<Flame className="h-3.5 w-3.5" aria-hidden="true" />}
                   variant="ghSolid"
-                  onClick={createNavClickHandler("#contact", true)}
+                  onClick={createNavClickHandler("/get-results", true)}
                   className="mt-1 w-fit border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90"
                 />
               </div>
