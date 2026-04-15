@@ -4,34 +4,8 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { useRef } from "react";
 
-import StatCard from "@/components/sections/shared/StatCard";
-
-const statCards = [
-  {
-    number: "10M+",
-    label: "Organische views",
-    sub: "Groei door slimme content",
-    color: "bg-gh-blue",
-  },
-  {
-    number: "30+",
-    label: "Merken geholpen",
-    sub: "Van start-up tot multinational",
-    color: "bg-gh-orange text-white",
-  },
-  {
-    number: "60+",
-    label: "Campagnes per maand",
-    sub: "Altijd live. Altijd doorpakken.",
-    color: "bg-gh-green",
-  },
-  {
-    number: "24/7",
-    label: "Creatieve energie",
-    sub: "Social-first execution",
-    color: "bg-[#1f2937] text-white",
-  },
-] as const;
+import StatCard from "@/components/Homepage/sections/shared/StatCard";
+import { heroData } from "@/lib/data/homepage-data";
 
 const layoutPresets = [
   [
@@ -67,10 +41,25 @@ export default function Hero() {
     () => {
       const slots = gsap.utils.toArray<HTMLElement>(".stat-slot");
       let cleanupHandlers: Array<() => void> = [];
+      const basePreset =
+        layoutPresets[Math.floor(Math.random() * layoutPresets.length)];
 
-      if (window.innerWidth >= 1280 && slots.length === statCards.length) {
-        const preset =
-          layoutPresets[Math.floor(Math.random() * layoutPresets.length)];
+      const getCardMotion = (index: number) => {
+        const layout = basePreset[index];
+        const card = heroData.stats[index];
+        const isCopyCard = Boolean(card.number);
+
+        return {
+          ...layout,
+          rotation: isCopyCard
+            ? Math.round(layout.rotation * 0.35)
+            : layout.rotation,
+          scale: isCopyCard ? 1 : layout.scale,
+        };
+      };
+
+      if (window.innerWidth >= 1280 && slots.length === heroData.stats.length) {
+        const preset = heroData.stats.map((_, index) => getCardMotion(index));
 
         slots.forEach((slot, idx) => {
           const layout = preset[idx];
@@ -171,31 +160,38 @@ export default function Hero() {
     >
       <div className="mx-auto max-w-400">
         <div className="leading-[0.92] font-extrabold tracking-tighter text-gh-black">
-          <span className="hero-line block text-5xl md:text-7xl lg:text-9xl">
-            Get Hyped. Get
-          </span>
-          <span className="hero-line block text-5xl md:text-7xl lg:text-9xl">
-            Noticed. Get Results.
-          </span>
+          {heroData.headlineLines.map((line) => (
+            <span
+              key={line}
+              className="hero-line block text-5xl md:text-7xl lg:text-9xl"
+            >
+              {line}
+            </span>
+          ))}
         </div>
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
           <p className="hero-sub max-w-sm text-lg leading-[1.4] font-semibold tracking-tight text-gh-black md:max-w-md md:text-2xl lg:max-w-lg lg:text-4xl">
-            Klaar met gokken op content die niets oplevert?
+            {heroData.subheadline}
           </p>
         </div>
 
         <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-0">
-          {statCards.map((card, index) => (
+          {heroData.stats.map((card) => (
             <div
-              key={`${card.number}-${index}`}
-              className="stat-slot will-change-transform"
+              key={card.id}
+              className={
+                card.videoSrc ? "stat-slot will-change-transform" : "stat-slot"
+              }
             >
               <StatCard
                 number={card.number}
                 label={card.label}
                 sub={card.sub}
+                videoSrc={card.videoSrc}
+                videoLabel={card.videoLabel}
                 className={card.color}
+                copyClassName={card.number ? "transform-none" : undefined}
               />
             </div>
           ))}

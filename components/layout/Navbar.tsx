@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import ActionLink from "@/components/sections/shared/ActionLink";
+import ActionLink from "@/components/Homepage/sections/shared/ActionLink";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -26,15 +26,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { companyName, navLinks } from "@/lib/data/site-data";
 import { scrollToSection as scrollToSectionById } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { label: "Expertises", href: "#" },
-  { label: "Work", href: "#" },
-  { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
-] as const;
 
 const desktopCtaClassName =
   "border-fuchsia-200 bg-fuchsia-200 text-gh-black hover:bg-fuchsia-200/90";
@@ -48,6 +42,11 @@ export default function Navbar() {
   const isClosingRef = useRef(false);
   const openTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const prefersReducedMotionRef = useRef(false);
+  const lastScrollYRef = useRef(0);
+  const navbarHiddenRef = useRef(false);
+  const desktopLinkRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const desktopHighlightRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const headerRef = useRef<HTMLElement>(null);
   const sheetContentRef = useRef<HTMLDivElement>(null);
   const menuHeaderRef = useRef<HTMLDivElement>(null);
   const menuCtaRef = useRef<HTMLDivElement>(null);
@@ -59,10 +58,63 @@ export default function Navbar() {
       prefersReducedMotionRef.current = motionQuery.matches;
     };
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+      const header = headerRef.current;
+
+      setScrolled(currentScrollY > 30);
+
+      if (!header || open) {
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY <= 24) {
+        navbarHiddenRef.current = false;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          y: 0,
+          autoAlpha: 1,
+          duration: prefersReducedMotionRef.current ? 0 : 0.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (Math.abs(scrollDelta) < 6) {
+        lastScrollYRef.current = currentScrollY;
+        return;
+      }
+
+      if (scrollDelta > 0 && !navbarHiddenRef.current) {
+        navbarHiddenRef.current = true;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          yPercent: -130,
+          autoAlpha: 0.94,
+          duration: prefersReducedMotionRef.current ? 0 : 0.22,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      } else if (scrollDelta < 0 && navbarHiddenRef.current) {
+        navbarHiddenRef.current = false;
+        gsap.killTweensOf(header);
+        gsap.to(header, {
+          yPercent: 0,
+          autoAlpha: 1,
+          duration: prefersReducedMotionRef.current ? 0 : 0.26,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+      }
+
+      lastScrollYRef.current = currentScrollY;
     };
 
     updateMotionPreference();
+    lastScrollYRef.current = window.scrollY;
     handleScroll();
 
     motionQuery.addEventListener("change", updateMotionPreference);
@@ -72,6 +124,41 @@ export default function Navbar() {
     return () => {
       motionQuery.removeEventListener("change", updateMotionPreference);
       window.removeEventListener("scroll", handleScroll);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header || !open) return;
+
+    navbarHiddenRef.current = false;
+    gsap.killTweensOf(header);
+    gsap.to(header, {
+      yPercent: 0,
+      autoAlpha: 1,
+      duration: prefersReducedMotionRef.current ? 0 : 0.2,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  }, [open]);
+
+  useEffect(() => {
+    const highlights = desktopHighlightRefs.current.filter(
+      (node): node is HTMLSpanElement => Boolean(node),
+    );
+
+    gsap.set(highlights, {
+      autoAlpha: 0,
+      scaleX: 0.72,
+      x: -8,
+      transformOrigin: "left center",
+    });
+
+    return () => {
+      gsap.killTweensOf([
+        ...desktopLinkRefs.current.filter(Boolean),
+        ...highlights,
+      ]);
     };
   }, []);
 
@@ -156,6 +243,42 @@ export default function Navbar() {
         }
       },
     [animateMenuClose, scrollToSection],
+  );
+
+  const animateDesktopNavHover = useCallback(
+    (index: number, isEntering: boolean) => {
+      const link = desktopLinkRefs.current[index];
+      const highlight = desktopHighlightRefs.current[index];
+
+      if (!link || !highlight) return;
+
+      gsap.killTweensOf([link, highlight]);
+
+      if (prefersReducedMotionRef.current) {
+        gsap.set(link, { color: "var(--gh-black)" });
+        gsap.set(highlight, {
+          autoAlpha: isEntering ? 1 : 0,
+          scaleX: isEntering ? 1 : 0.72,
+          x: isEntering ? 0 : -8,
+        });
+        return;
+      }
+
+      gsap.to(link, {
+        y: isEntering ? -1 : 0,
+        color: "var(--gh-black)",
+        duration: isEntering ? 0.16 : 0.12,
+        ease: "power2.out",
+      });
+      gsap.to(highlight, {
+        autoAlpha: isEntering ? 1 : 0,
+        scaleX: isEntering ? 1 : 0.72,
+        x: isEntering ? 0 : -8,
+        duration: isEntering ? 0.18 : 0.12,
+        ease: "power2.out",
+      });
+    },
+    [],
   );
 
   useEffect(() => {
@@ -245,14 +368,17 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 px-6 pt-5 md:px-10">
+    <header
+      ref={headerRef}
+      className="fixed top-0 right-0 left-0 z-50 px-6 pt-5 will-change-transform md:px-10"
+    >
       <div className="mx-auto flex w-full max-w-400 items-center justify-between gap-4 xl:grid xl:grid-cols-[1fr_auto_1fr] xl:items-center">
         <Link
           href="/"
           aria-label="Get Hyped home"
           className="justify-self-start text-4xl leading-none font-extrabold tracking-tighter whitespace-nowrap text-gh-black md:text-5xl"
         >
-          GETHYPED
+          {companyName}
         </Link>
 
         <NavigationMenu
@@ -263,15 +389,37 @@ export default function Navbar() {
           )}
         >
           <NavigationMenuList className="gap-4">
-            {navLinks.map((link) => (
+            {navLinks.map((link, index) => (
               <NavigationMenuItem key={link.label}>
                 <NavigationMenuLink asChild className="text-sm! xl:text-base!">
                   <Link
+                    ref={(node) => {
+                      desktopLinkRefs.current[index] = node;
+                    }}
                     href={link.href}
                     onClick={createNavClickHandler(link.href)}
-                    className="font-semibold text-gh-black hover:opacity-70"
+                    onMouseEnter={() => {
+                      animateDesktopNavHover(index, true);
+                    }}
+                    onMouseLeave={() => {
+                      animateDesktopNavHover(index, false);
+                    }}
+                    onFocus={() => {
+                      animateDesktopNavHover(index, true);
+                    }}
+                    onBlur={() => {
+                      animateDesktopNavHover(index, false);
+                    }}
+                    className="relative inline-flex items-center gap-2 overflow-hidden rounded-xl px-3 py-2 font-semibold text-gh-black will-change-transform"
                   >
-                    {link.label}
+                    <span
+                      ref={(node) => {
+                        desktopHighlightRefs.current[index] = node;
+                      }}
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-xl bg-[linear-gradient(110deg,var(--gh-pink)_0%,var(--gh-orange)_100%)] opacity-0 transform-[translateX(-8px)_scaleX(0.72)] origin-[left_center] will-change-transform"
+                    />
+                    <span className="relative z-10">{link.label}</span>
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -323,7 +471,7 @@ export default function Navbar() {
             <nav className="flex flex-col gap-3 px-6 pt-2 pb-6">
               {navLinks.map((link, index) => (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   ref={(node) => {
                     menuLinkRefs.current[index] = node;
                   }}
