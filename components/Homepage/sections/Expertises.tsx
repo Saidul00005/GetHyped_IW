@@ -97,11 +97,11 @@ export default function Expertises() {
               aria-label={`${item.name} - ${item.cta}`}
               className="absolute inset-0 z-0 rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gh-orange/45"
             />
-            <div className="relative z-10 pointer-events-none">
-              <div className="mb-6 flex items-center justify-between">
+            <div className="relative z-10 pointer-events-none flex h-full flex-col">
+              <div className="mb-2 flex items-center justify-between md:mb-3">
                 <SectionTag>Expertise</SectionTag>
                 <span
-                  className={`text-8xl leading-none font-extrabold tracking-tighter ${
+                  className={`text-6xl leading-none font-extrabold tracking-tighter xl:text-8xl ${
                     index === 0 || index === 1
                       ? "text-black/25"
                       : "text-white/55"
@@ -115,12 +115,12 @@ export default function Expertises() {
                 {item.name}
               </h2>
 
-              <div className="mt-24 grid grid-cols-1 items-end gap-8 md:grid-cols-2">
+              <div className="mt-auto grid grid-cols-1 items-end gap-6 md:grid-cols-2 md:gap-8 pt-8 md:pt-10">
                 <div>
-                  <h3 className="text-5xl leading-tight font-extrabold tracking-tight text-gh-black">
+                  <h3 className="text-3xl leading-tight font-extrabold tracking-tight text-gh-black md:text-4xl xl:text-5xl">
                     {item.title}
                   </h3>
-                  <p className="mt-4 max-w-xl text-3xl leading-[1.2] font-semibold text-black/85">
+                  <p className="mt-3 max-w-xl text-xl leading-[1.3] font-semibold text-black/85 md:text-2xl xl:text-3xl">
                     {item.desc}
                   </p>
                   <div className="pointer-events-auto">
@@ -128,11 +128,12 @@ export default function Expertises() {
                       href={item.href}
                       label={item.cta}
                       variant={item.ctaVariant}
-                      className="mt-6"
+                      className="mt-5 md:mt-6"
                     />
                   </div>
                 </div>
-                <div className="relative ml-auto h-110 w-full max-w-95 overflow-hidden rounded-[28px] border-4 border-white bg-black/10">
+
+                <div className="relative ml-auto w-full max-w-95 overflow-hidden rounded-[28px] border-4 border-white bg-black/10 h-[45vh] min-h-55 max-h-130">
                   <AdaptiveVideo
                     src={item.videoSrc}
                     label={item.videoLabel}
