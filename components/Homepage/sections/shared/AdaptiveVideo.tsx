@@ -49,6 +49,7 @@ const AdaptiveVideo = forwardRef<AdaptiveVideoHandle, AdaptiveVideoProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    const [hasResolvedDevice, setHasResolvedDevice] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
     const [isInView, setIsInView] = useState(false);
@@ -73,6 +74,7 @@ const AdaptiveVideo = forwardRef<AdaptiveVideoHandle, AdaptiveVideoProps>(
 
       updateDesktop();
       updateMotionPreference();
+      setHasResolvedDevice(true);
 
       desktopQuery.addEventListener("change", updateDesktop);
       motionQuery.addEventListener("change", updateMotionPreference);
@@ -104,6 +106,12 @@ const AdaptiveVideo = forwardRef<AdaptiveVideoHandle, AdaptiveVideoProps>(
         observer.disconnect();
       };
     }, [loadRootMargin]);
+
+    useEffect(() => {
+      if (!hasResolvedDevice || isDesktop) return;
+
+      setShouldLoad(true);
+    }, [hasResolvedDevice, isDesktop]);
 
     useEffect(() => {
       if (!isInView && usesManualPlayback) {

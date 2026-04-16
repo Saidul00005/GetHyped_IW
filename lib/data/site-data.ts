@@ -8,10 +8,10 @@ export const siteUrl =
 export const defaultSeoImagePath = "/images/Homepage/Statement/Image1.jpg";
 
 export const navLinks = [
-  { label: "Expertises", href: "#expertises" },
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Expertises", href: "/expertises" },
+  { label: "Work", href: "/work" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const contactInfo = {

@@ -18,6 +18,8 @@ type ScrollToSectionOptions = {
   headerFallbackHeight?: number;
 };
 
+const PENDING_SECTION_KEY = "__pendingSectionScroll";
+
 export function scrollToSection(
   sectionId: string,
   {
@@ -51,4 +53,20 @@ export function scrollToSection(
   });
 
   return true;
+}
+
+export function queueSectionScroll(sectionId: string) {
+  if (typeof window === "undefined") return;
+
+  window.sessionStorage.setItem(PENDING_SECTION_KEY, sectionId);
+}
+
+export function consumeQueuedSectionScroll() {
+  if (typeof window === "undefined") return null;
+
+  const sectionId = window.sessionStorage.getItem(PENDING_SECTION_KEY);
+  if (!sectionId) return null;
+
+  window.sessionStorage.removeItem(PENDING_SECTION_KEY);
+  return sectionId;
 }
